@@ -3,9 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
-	"regexp"
 	"sort"
-	"strings"
 
 	"github.com/go-git/go-git/v6"
 	"github.com/go-git/go-git/v6/plumbing"
@@ -105,16 +103,7 @@ func main() {
 		} else {
 			printGroupedCommits(commits, config)
 		}
-
 	}
-}
-
-func getFirstLine(message string) string {
-	message = strings.TrimSpace(message)
-	if idx := strings.Index(message, "\n"); idx != -1 {
-		return strings.TrimSpace(message[:idx])
-	}
-	return message
 }
 
 // getCommitsBetween returns all commits between fromHash (exclusive) and toHash (inclusive)
@@ -147,8 +136,7 @@ func getCommitsBetween(repo *git.Repository, fromHash *plumbing.Hash, toHash plu
 	}
 
 	if fromHash == nil {
-
-		// Collect commits until we reach the older commit
+		// Collect all commits (for the oldest tag)
 		err = commitIter.ForEach(func(c *object.Commit) error {
 			commits = append(commits, c)
 			return nil
@@ -159,91 +147,7 @@ func getCommitsBetween(repo *git.Repository, fromHash *plumbing.Hash, toHash plu
 		}
 
 		return commits, nil
-
 	}
 
-	return nil, fmt.Errorf("error")
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-// extractCommitType extracts the type from a conventional commit message
-// e.g., "feat: add new feature" -> "feat"
-func extractCommitType(message string) string {
-	// Match conventional commit format: type(scope): message or type: message
-	re := regexp.MustCompile(`^(\w+)(?:\([^)]+\))?:\s`)
-	matches := re.FindStringSubmatch(message)
-	if len(matches) > 1 {
-		return matches[1]
-	}
-	return "other"
-}
-
-// shouldIgnoreCommit checks if a commit message contains the ignore pattern
-func shouldIgnoreCommit(message string, ignorePattern string) bool {
-	if ignorePattern == "" {
-		return false
-	}
-	return strings.Contains(message, ignorePattern)
-}
-
-// printGroupedCommits groups commits by type and prints them
-func printGroupedCommits(commits []*object.Commit, config *Config) {
-	// Filter out ignored commits
-	var filteredCommits []*object.Commit
-	for _, commit := range commits {
-		if !shouldIgnoreCommit(commit.Message, config.Ignore) {
-			filteredCommits = append(filteredCommits, commit)
-		}
-	}
-
-	// If all commits were filtered out, show message
-	if len(filteredCommits) == 0 {
-		fmt.Println("  No commits (all filtered)")
-		return
-	}
-
-	// Group commits by type
-	groups := make(map[string][]*object.Commit)
-	for _, commit := range filteredCommits {
-		commitType := extractCommitType(getFirstLine(commit.Message))
-		groups[commitType] = append(groups[commitType], commit)
-	}
-
-	// Define order of groups based on config
-	var groupOrder []string
-	for key := range config.CommitGroups.TitleMaps {
-		if _, exists := groups[key]; exists {
-			groupOrder = append(groupOrder, key)
-		}
-	}
-	// Add "other" category at the end if it exists
-	if _, exists := groups["other"]; exists {
-		groupOrder = append(groupOrder, "other")
-	}
-
-	// Print each group
-	for _, groupType := range groupOrder {
-		title := config.CommitGroups.TitleMaps[groupType]
-		if title == "" {
-			title = "Other"
-		}
-
-		fmt.Printf("### %s\n\n", title)
-		for _, commit := range groups[groupType] {
-			message := getFirstLine(commit.Message)
-			// Remove the type prefix for cleaner output
-			message = regexp.MustCompile(`^\w+(?:\([^)]+\))?:\s*`).ReplaceAllString(message, "")
-
-			fmt.Printf("  • %s - %s\n",
-				commit.Hash.String()[:7],
-				message)
-		}
-		fmt.Println()
-	}
+	return nil, fmt.Errorf("unexpected error in getCommitsBetween")
 }
