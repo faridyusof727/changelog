@@ -28,5 +28,5 @@ func main() {
 		panic(err)
 	}
 
-	Print(config, repo, tags)
+	PrintMD(config, repo, tags)
 }
