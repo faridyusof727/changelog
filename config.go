@@ -16,6 +16,7 @@ type CommitGroups struct {
 	TitleMaps map[string]string `yaml:"title_maps"`
 }
 
+// NewConfig loads and parses the configuration from the given YAML file path.
 func NewConfig(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {

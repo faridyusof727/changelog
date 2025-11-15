@@ -62,21 +62,25 @@ The tool recognizes the [Conventional Commits](https://www.conventionalcommits.o
 ### Examples
 
 **Regular commit:**
+
 ```
 feat: add user authentication
 ```
 
 **Commit with scope:**
+
 ```
 feat(auth): add OAuth2 support
 ```
 
 **Breaking change with `!` indicator:**
+
 ```
 feat!: remove deprecated API endpoints
 ```
 
 **Breaking change with footer:**
+
 ```
 feat: redesign user profile
 
