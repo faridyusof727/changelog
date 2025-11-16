@@ -1,0 +1,15 @@
+git_path: "."
+ignore: "[skip ci]"
+commit_groups:
+  title_maps:
+    breaking: Breaking Changes
+    feat: Added
+    fix: Fixed
+    perf: Performance
+    refactor: Changed
+    docs: Documentation
+    chore: Maintenance
+    ci: CI/CD
+    build: Build
+    test: Testing
+    style: Style
