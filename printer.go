@@ -5,5 +5,5 @@ type Printer interface {
 	// MapData processes and maps the provided tag information for output.
 	MapData(tags []*TagInfo)
 	// Print outputs the formatted changelog data.
-	Print()
+	Print(current string)
 }

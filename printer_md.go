@@ -79,7 +79,7 @@ func (c *MarkdownPrinter) MapData(tags []*TagInfo) {
 		}
 
 		tagData := Tag{
-			Name:    oldestTag.Name + " (oldest)",
+			Name:    oldestTag.Name,
 			Commits: []Commit{},
 		}
 
@@ -110,10 +110,14 @@ func escapePipes(s string) string {
 }
 
 // Print implements Printer.
-func (c *MarkdownPrinter) Print() {
+func (c *MarkdownPrinter) Print(current string) {
 	// Print each tag section
 	for _, tag := range c.Data.Tags {
-		fmt.Printf("\n## %s\n\n", tag.Name)
+		title := fmt.Sprintf("\n## %s", tag.Name)
+		if current == tag.Name {
+			title = fmt.Sprintf("%s - Current Release", title)
+		}
+		fmt.Printf("%s\n\n", title)
 
 		if len(tag.Commits) == 0 {
 			fmt.Println("_No commits between these tags_")

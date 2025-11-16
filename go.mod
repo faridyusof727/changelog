@@ -4,6 +4,7 @@ go 1.25.4
 
 require (
 	github.com/go-git/go-git/v6 v6.0.0-20251112161705-8cc3e21f07a9
+	github.com/urfave/cli/v3 v3.6.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
