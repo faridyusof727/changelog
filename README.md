@@ -1,6 +1,6 @@
 # Git Changelog Generator
 
-A Go-based tool that generates formatted changelogs from Git tags and conventional commits.
+A Go-based tool that generates formatted changelogs from Git tags and conventional commits, outputting in Markdown table format.
 
 ## Features
 
@@ -8,22 +8,34 @@ A Go-based tool that generates formatted changelogs from Git tags and convention
 - 📝 **Commit Grouping**: Groups commits by type using conventional commit format
 - ⚠️ **Breaking Changes Detection**: Automatically detects and highlights breaking changes
 - 🚫 **Commit Filtering**: Filters commits with ignore patterns (e.g., `[skip ci]`)
-- 🎯 **Clean Output**: Shows only commit subject lines (removes descriptions)
+- 📊 **Markdown Tables**: Outputs commits in clean, readable markdown tables
+- 👤 **Author Tracking**: Displays commit author for each change
+- 🔍 **Scope Support**: Shows commit scope when available
 - 📜 **Complete History**: Includes the oldest tag with all its historical commits
 
 ## Installation
 
+### From Source
+
 ```bash
+git clone https://github.com/faridyusof727/changelog.git
+cd changelog
 go build
+```
+
+### Using Go Install
+
+```bash
+go install github.com/faridyusof727/changelog@latest
 ```
 
 ## Usage
 
 ```bash
-./changelog
+./changelog > CHANGELOG.md
 ```
 
-The tool will read the configuration from `.changelog.yml` and generate a changelog based on your Git tags.
+The tool will read the configuration from `.changelog.yml` and generate a changelog based on your Git tags, outputting to stdout.
 
 ## Configuration
 
@@ -115,51 +127,60 @@ The breaking changes section will appear at the top of each tag's changelog with
 
 ## Output Format
 
-```
-========================================
-v1.2.0
-========================================
+The tool generates markdown-formatted changelogs with tables for each commit group:
+
+```markdown
+## v1.2.0
 
 ### ⚠️  Breaking Changes
 
-  • abc1234 - **api**: change authentication flow to use JWT tokens
+| Commit | Scope | Description | Author |
+|--------|-------|-------------|--------|
+| `abc1234` | api | change authentication flow to use JWT tokens | John Doe |
 
 ### Added
 
-  • def5678 - **auth**: new OAuth2 provider support
-  • ghi9012 - user profile page
+| Commit | Scope | Description | Author |
+|--------|-------|-------------|--------|
+| `def5678` | auth | new OAuth2 provider support | Jane Smith |
+| `ghi9012` | - | user profile page | John Doe |
 
 ### Fixed
 
-  • jkl3456 - memory leak in cache
-  • mno7890 - **db**: connection pool timeout
+| Commit | Scope | Description | Author |
+|--------|-------|-------------|--------|
+| `jkl3456` | - | memory leak in cache | Bob Johnson |
+| `mno7890` | db | connection pool timeout | Jane Smith |
 
-========================================
-v1.1.0
-========================================
-
-### Added
-
-  • pqr1234 - initial setup
-
-========================================
-v1.0.0 (oldest)
-========================================
+## v1.1.0
 
 ### Added
 
-  • stu5678 - project initialization
+| Commit | Scope | Description | Author |
+|--------|-------|-------------|--------|
+| `pqr1234` | - | initial setup | John Doe |
+
+## v1.0.0 (oldest)
+
+### Added
+
+| Commit | Scope | Description | Author |
+|--------|-------|-------------|--------|
+| `stu5678` | - | project initialization | John Doe |
 ```
 
 ## Project Structure
 
 ```
 .
-├── main.go      # Main logic for tag processing and changelog generation
-├── commit.go    # Commit parsing and grouping logic
-├── config.go    # Configuration management
-├── tag.go       # Tag information struct
-└── .changelog.yml  # Configuration file
+├── main.go           # Entry point and main orchestration
+├── config.go         # Configuration file parsing (YAML)
+├── tag.go            # Tag loading and sorting logic
+├── commit.go         # Commit parsing and conventional commit handling
+├── printer.go        # Printer interface definition
+├── printer_md.go     # Markdown table printer implementation
+├── .changelog.yml    # Configuration file (user-created)
+└── EXAMPLES.md       # Detailed examples of commit formats
 ```
 
 ## Tech Stack
@@ -170,13 +191,36 @@ v1.0.0 (oldest)
 
 ## How It Works
 
-1. **Load Configuration**: Reads `.changelog.yml` for settings
-2. **Fetch Tags**: Gets all tags from the repository and sorts by commit time
-3. **Extract Commits**: For each tag pair, extracts commits between them
-4. **Parse Commits**: Parses each commit using conventional commit format
-5. **Detect Breaking Changes**: Checks for `!` indicator and `BREAKING CHANGE:` footer
-6. **Group by Type**: Groups commits by their type (feat, fix, docs, etc.)
-7. **Format Output**: Displays grouped commits with breaking changes at the top
+1. **Load Configuration**: Reads `.changelog.yml` for settings and commit group mappings
+2. **Open Repository**: Opens the Git repository at the specified path
+3. **Fetch Tags**: Gets all tags from the repository and sorts by commit time (newest first)
+4. **Load Tag Info**: Resolves each tag to its commit (handles both lightweight and annotated tags)
+5. **Extract Commits**: For each consecutive tag pair, extracts commits between them
+6. **Parse Commits**: Parses each commit using conventional commit format:
+   - Extracts type, scope, and subject from commit message
+   - Detects breaking changes via `!` indicator or `BREAKING CHANGE:` footer
+   - Filters out commits matching the ignore pattern
+7. **Group by Type**: Groups commits by their type (feat, fix, docs, etc.)
+8. **Format Output**: Generates markdown tables with:
+   - Breaking changes section first (if any)
+   - Commit groups in configured order
+   - Each row showing: commit hash, scope, description, and author
+
+## Examples
+
+For detailed examples of different commit types and their changelog output, see [`EXAMPLES.md`](EXAMPLES.md).
+
+## TODO
+
+- [ ] Add HTML static file printer for web-based changelog viewing
+- [ ] Add JSON printer for programmatic consumption
+- [ ] Add plain text printer for simple output
+- [ ] Support custom templates for different output formats
+- [ ] Add CLI flags for output format selection
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
