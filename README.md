@@ -63,7 +63,7 @@ commit_groups:
 
 The tool recognizes the [Conventional Commits](https://www.conventionalcommits.org/) format:
 
-```
+```text
 <type>[optional scope]: <description>
 
 [optional body]
@@ -75,25 +75,25 @@ The tool recognizes the [Conventional Commits](https://www.conventionalcommits.o
 
 **Regular commit:**
 
-```
+```text
 feat: add user authentication
 ```
 
 **Commit with scope:**
 
-```
+```text
 feat(auth): add OAuth2 support
 ```
 
 **Breaking change with `!` indicator:**
 
-```
+```text
 feat!: remove deprecated API endpoints
 ```
 
 **Breaking change with footer:**
 
-```
+```text
 feat: redesign user profile
 
 BREAKING CHANGE: The user profile API has been completely redesigned.
@@ -108,7 +108,7 @@ The tool detects breaking changes in two ways:
 
 Add an exclamation mark after the type/scope:
 
-```
+```text
 feat!: change API response format
 fix(api)!: update authentication flow
 ```
@@ -117,7 +117,7 @@ fix(api)!: update authentication flow
 
 Add a `BREAKING CHANGE:` or `BREAKING-CHANGE:` footer in the commit body:
 
-```
+```text
 feat: update database schema
 
 BREAKING CHANGE: Database migration required. Run `migrate up` before deploying.
@@ -171,7 +171,7 @@ The tool generates markdown-formatted changelogs with tables for each commit gro
 
 ## Project Structure
 
-```
+```text
 .
 ├── main.go           # Entry point and main orchestration
 ├── config.go         # Configuration file parsing (YAML)
@@ -205,11 +205,7 @@ The tool generates markdown-formatted changelogs with tables for each commit gro
    - Breaking changes section first (if any)
    - Commit groups in configured order
    - Each row showing: commit hash, scope, description, and author
-
-## Examples
-
-For detailed examples of different commit types and their changelog output, see [`EXAMPLES.md`](EXAMPLES.md).
-
+  
 ## TODO
 
 - [ ] Add HTML static file printer for web-based changelog viewing
