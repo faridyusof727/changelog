@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"regexp"
 	"strings"
@@ -112,19 +111,16 @@ func getCommitsBetween(repo *git.Repository, fromHash *plumbing.Hash, toHash plu
 		return commits, nil
 	}
 
-	if fromHash == nil {
-		// Collect all commits (for the oldest tag)
-		err = commitIter.ForEach(func(c *object.Commit) error {
-			commits = append(commits, c)
-			return nil
-		})
+	// Collect all commits (for the oldest tag)
+	err = commitIter.ForEach(func(c *object.Commit) error {
+		commits = append(commits, c)
+		return nil
+	})
 
-		if err != nil && err != io.EOF {
-			return nil, err
-		}
-
-		return commits, nil
+	if err != nil && err != io.EOF {
+		return nil, err
 	}
 
-	return nil, fmt.Errorf("unexpected error in getCommitsBetween")
+	return commits, nil
+
 }
