@@ -24,14 +24,14 @@ type ChangelogData struct {
 	Tags []Tag
 }
 
-type Changelog struct {
+type MarkdownPrinter struct {
 	config *Config
 	repo   *git.Repository
 
 	Data ChangelogData
 }
 
-func (c *Changelog) MapData(tags []*TagInfo) {
+func (c *MarkdownPrinter) MapData(tags []*TagInfo) {
 	// Process commits between consecutive tags
 	for i := 0; i < len(tags)-1; i++ {
 		newerTag := tags[i]
@@ -110,7 +110,7 @@ func escapePipes(s string) string {
 }
 
 // Print implements Printer.
-func (c *Changelog) Print() {
+func (c *MarkdownPrinter) Print() {
 	// Print each tag section
 	for _, tag := range c.Data.Tags {
 		fmt.Printf("\n## %s\n\n", tag.Name)
@@ -192,7 +192,7 @@ func (c *Changelog) Print() {
 }
 
 func NewMarkdownPrinter(config *Config, repo *git.Repository) Printer {
-	return &Changelog{
+	return &MarkdownPrinter{
 		config: config,
 		repo:   repo,
 	}
