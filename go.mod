@@ -1,6 +1,6 @@
 module github.com/faridyusof727/changelog
 
-go 1.24.1
+go 1.25.4
 
 require (
 	github.com/go-git/go-git/v6 v6.0.0-20251112161705-8cc3e21f07a9
@@ -11,10 +11,10 @@ require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ProtonMail/go-crypto v1.3.0 // indirect
 	github.com/cloudflare/circl v1.6.1 // indirect
-	github.com/cyphar/filepath-securejoin v0.5.0 // indirect
+	github.com/cyphar/filepath-securejoin v0.6.0 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/go-git/gcfg/v2 v2.0.2 // indirect
-	github.com/go-git/go-billy/v6 v6.0.0-20251022185412-61e52df296a5 // indirect
+	github.com/go-git/go-billy/v6 v6.0.0-20251111123000-fb5ff8f3f0b0 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/kevinburke/ssh_config v1.4.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
