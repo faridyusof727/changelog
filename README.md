@@ -12,6 +12,7 @@ A Go-based tool that generates formatted changelogs from Git tags and convention
 - 👤 **Author Tracking**: Displays commit author for each change
 - 🔍 **Scope Support**: Shows commit scope when available
 - 📜 **Complete History**: Includes the oldest tag with all its historical commits
+- 🏷️ **Current Release Marking**: Mark a specific version tag as the current release
 
 ## Installation
 
@@ -31,11 +32,23 @@ go install github.com/faridyusof727/changelog@latest
 
 ## Usage
 
+### Basic Usage
+
 ```bash
 ./changelog > CHANGELOG.md
 ```
 
 The tool will read the configuration from `.changelog.yml` and generate a changelog based on your Git tags, outputting to stdout.
+
+### Mark Current Release
+
+You can mark a specific version tag as the current release using the `--current` flag:
+
+```bash
+./changelog --current v1.2.0 > CHANGELOG.md
+```
+
+This will highlight the specified version tag in the generated changelog output.
 
 ## Configuration
 
