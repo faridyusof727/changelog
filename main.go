@@ -28,5 +28,7 @@ func main() {
 		panic(err)
 	}
 
-	PrintMD(config, repo, tags)
+	p := NewChangelogPrinter(config, repo)
+	p.MapData(tags)
+	p.Print()
 }
